@@ -24,7 +24,7 @@ def calculate_metrics(y_true, y_pred, y_proba) -> dict:
 
 def compare_models_metrics(resultados: list[dict]) -> pd.DataFrame:
 
-    cols = ["model", "accuracy", "f1_score", "precision", "recall", "roc_auc"]
+    cols = ["model", "accuracy", "f1_score", "precision", "recall", "roc_auc", "pr_auc"]
     df = pd.DataFrame(resultados)[cols]
 
     print("\n" + "=" * 70)
@@ -40,15 +40,17 @@ def compare_models_metrics(resultados: list[dict]) -> pd.DataFrame:
     melhor_f1 = df.loc[df["f1_score"].idxmax()]
     melhor_roc_auc = df.loc[df["roc_auc"].idxmax()]
     melhor_recall = df.loc[df["recall"].idxmax()]
-
+    melhor_pr_auc = df.loc[df["pr_auc"].idxmax()]
     for titulo, melhor in [
         ("F1", melhor_f1),
         ("ROC-AUC", melhor_roc_auc),
         ("Recall", melhor_recall),
+        ("PR-AUC", melhor_pr_auc),
     ]:
         print(f"\n  Melhor modelo por {titulo}: {melhor['model']}")
         print(f"    F1:        {melhor['f1_score']:.4f}")
         print(f"    ROC-AUC:   {melhor['roc_auc']:.4f}")
+        print(f"    PR-AUC:    {melhor['pr_auc']:.4f}")
         print(f"    Precision: {melhor['precision']:.4f}")
         print(f"    Recall:    {melhor['recall']:.4f}")
         print(f"    Accuracy:  {melhor['accuracy']:.4f}")
