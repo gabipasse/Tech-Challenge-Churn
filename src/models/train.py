@@ -76,7 +76,7 @@ def train_pipeline(
     mlflow.end_run()
     mlflow.set_experiment(MLFLOW_EXPERIMENT)
 
-    with mlflow.start_run(run_name=nome_run):
+    with mlflow.start_run(run_name=nome_run) as run:
         mlflow.log_params(dataset_meta)
 
         if fazer_cv:
