@@ -12,7 +12,7 @@ MODEL_ARTIFACTS: dict = {}
 def load_artifacts() -> None:
     try:
         artifacts = joblib.load(MODEL_ARTIFACT_PATH)
-        MODEL_ARTIFACTS["pipeline"] = artifacts["pipeline"]
+        MODEL_ARTIFACTS["pipeline"] = artifacts["model"]
         MODEL_ARTIFACTS["threshold"] = artifacts.get("threshold", 0.5)
         MODEL_ARTIFACTS["metadata"] = artifacts.get("metadata", {})
         logger.info("Modelo carregado", extra={"path": MODEL_ARTIFACT_PATH})
