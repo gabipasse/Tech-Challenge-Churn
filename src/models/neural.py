@@ -1,12 +1,15 @@
 # src/models/neural.py
 
+import os
+import joblib
+
 import numpy as np
 import torch
 import torch.nn as nn
 import mlflow
 from sklearn.metrics import f1_score, precision_score, recall_score
 
-from src.config import EPOCHS, PATIENCE, LR, BATCH_SIZE, MLFLOW_EXPERIMENT
+from src.config import EPOCHS, PATIENCE, LR, BATCH_SIZE, MLFLOW_EXPERIMENT, MODEL_ARTIFACT_PATH
 from src.evaluation.metrics import calculate_metrics
 
 
@@ -156,5 +159,27 @@ def mlp(X_train_sc, X_val_sc, X_test_sc, y_train, y_val, y_test, dataset_meta: d
         for nome, valor in metricas.items():
             print(f"  {nome:<16}: {valor:.4f}")
         print(f"\n  Melhor Val Loss: {best_val_loss:.4f} (época {stop_epoch})")
+
+        print("\n=== MLP PYTORCH ===")
+        for nome, valor in metricas.items():
+            print(f"  {nome:<16}: {valor:.4f}")
+        print(f"\n  Melhor Val Loss: {best_val_loss:.4f} (época {stop_epoch})")
+
+       
+        
+
+        artifact = {
+            "model": classificator,
+            "threshold": THRESHOLD,
+            "metadata": {**dataset_meta, "run_name": "mlp_pytorch"},
+        }
+
+        path_run = MODEL_ARTIFACT_PATH.replace(".joblib", "_mlp_pytorch.joblib")
+        os.makedirs(os.path.dirname(path_run), exist_ok=True)
+        joblib.dump(artifact, path_run)
+        joblib.dump(artifact, MODEL_ARTIFACT_PATH)  # salva como latest também
+
+        print(f"  Artifact salvo em: {path_run}")
+        print(f"  Artifact latest:   {MODEL_ARTIFACT_PATH}")
 
     return classificator, y_pred_mlp, proba_mlp
